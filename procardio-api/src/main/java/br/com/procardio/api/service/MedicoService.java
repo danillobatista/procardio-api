@@ -1,22 +1,41 @@
 package br.com.procardio.api.service;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.procardio.api.dto.MedicoDTO;
 import br.com.procardio.api.enums.Especialidade;
+import br.com.procardio.api.exceptions.MedicoNaoEncontradoException;
 import br.com.procardio.api.model.Medico;
 import br.com.procardio.api.repository.MedicoRepository;
 
 @Service
 public class MedicoService {
-    
+
     @Autowired
     private MedicoRepository medicoRepository;
 
-    public Medico salvarMedico(Medico medico) {
+    public Medico salvarMedico(MedicoDTO medicoDTO) {
+        Medico medico = new Medico();
+
+        medico = medico.toModel(medicoDTO);
+
         return medicoRepository.save(medico);
+    }
+
+    public Medico salvarMedico(Long id, MedicoDTO medicoDTO) {
+        Medico medico = buscarMedicoPorId(id);
+
+        if (Objects.nonNull(medico)) {
+            medico = medico.toModel(medicoDTO);
+
+            return medicoRepository.save(medico);
+        }
+
+        throw new MedicoNaoEncontradoException(id);
     }
 
     public List<Medico> listarMedicos() {

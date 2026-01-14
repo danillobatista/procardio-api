@@ -1,5 +1,6 @@
 package br.com.procardio.api.controller;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,48 @@ public class UsuarioController {
 
     public ResponseEntity<Usuario> atualizarUsuario(@PathVariable Long id, @Valid @RequestBody UsuarioDTO usuarioDTO) {
         Usuario usuarioAtualizado = usuarioService.salvarUsuario(id, usuarioDTO);
-        
+
         if (Objects.nonNull(usuarioAtualizado)) {
             return ResponseEntity.ok(usuarioAtualizado);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<Usuario> buscarUsuarioPorId(@PathVariable Long id) {
+        Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+        if (Objects.nonNull(usuario)) {
+            return ResponseEntity.ok(usuario);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<Usuario> buscarUsuarioPorEmail(@Valid @PathVariable String email) {
+        Usuario usuario = usuarioService.buscarUsuarioPorEmail(email);
+        if (Objects.nonNull(usuario)) {
+            return ResponseEntity.ok(usuario);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<List<Usuario>> buscarUsuariosPorNome(@Valid @PathVariable String nome) {
+        List<Usuario> usuarios = usuarioService.buscarUsuariosPorNome(nome);
+        if (Objects.nonNull(usuarios)) {
+            return ResponseEntity.ok(usuarios);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        List<Usuario> usuarios = usuarioService.listarUsuarios();
+        if (Objects.nonNull(usuarios)) {
+            return ResponseEntity.ok(usuarios);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    public ResponseEntity<Void> deletarUsuario(@PathVariable Long id) {
+        usuarioService.deletarUsuario(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

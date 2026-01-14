@@ -1,5 +1,7 @@
 package br.com.procardio.api.model;
 
+import br.com.procardio.api.dto.MedicoDTO;
+import br.com.procardio.api.dto.UsuarioDTO;
 import br.com.procardio.api.enums.Especialidade;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,5 +36,16 @@ public class Medico {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Especialidade especialidade;
+
+    public Medico toModel(MedicoDTO dto) {
+        Medico medico = new Medico();
+
+        medico.setNome(dto.nome());
+        medico.setEmail(dto.email());
+        medico.setCrm(dto.crm());
+        medico.setEspecialidade(dto.especialidade());
+
+        return medico;
+    }
 
 }
